@@ -1,0 +1,10 @@
+.idea
+data
+vendor
+create_schema.sql
+create_schema_clickhouse.sql
+create_schema_clickhouse_rtb.sql
+nginx/logs/
+clickhouse-server/var
+clickhouse-server-distributed/var
+clickhouse-server-shard/var

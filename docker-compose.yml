@@ -1,0 +1,83 @@
+version: '3'
+
+services:
+  nginx:
+    build:
+      context: images/nginx
+    container_name: r2m_nginx
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d:cached
+      - ./nginx/logs:/var/log/nginx:cached
+      - ../../luckynews/display.vitrina:/var/www/display.vitrina:cached
+      - ../../luckynews/backend.tds:/var/www/backend.tds:cached
+    ports:
+      - "${NGINX_PORT:-80}:80"
+    restart: always
+    networks:
+      backend:
+        ipv4_address: 192.168.50.2
+
+  php:
+    build:
+      context: images/php8
+    container_name: r2m_php
+    volumes:
+      - ../backend.api:/var/www/backend.api:cached
+      - ./tools:/var/www/tools:cached
+      - ./php/xhprof/output:/var/tmp/xhprof/output:cached
+    working_dir: /var/www/
+    restart: always
+    networks:
+      backend:
+        ipv4_address: 192.168.50.3
+
+  postgresql:
+    image: postgres:alpine
+    container_name: r2m_pg
+    environment:
+      TZ: 'Europe/Moscow'
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    command: postgres -c log_statement=all
+    ports:
+      - "54321:5432"
+    volumes:
+      - ./postgresql/maindb/data:/var/lib/postgresql/data:cached
+      - ../db.schema/maindb/initialize_users.sql:/docker-entrypoint-initdb.d/01_initialize_users.sql:cached
+      - ../db.schema/maindb/initialize_database.sql:/docker-entrypoint-initdb.d/02_initialize_database.sql:cached
+    restart: always
+    networks:
+      backend:
+        ipv4_address: 192.168.50.4
+
+  # http://localhost:9398
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: r2m_swagger_ui
+    restart: always
+    environment:
+      URL: 'http://api.check-act.local/v1/debug/openapi.yaml'
+    ports:
+      - "9398:8080"
+    networks:
+      backend:
+        ipv4_address: 192.168.50.5
+
+  swagger-editor:
+    image: swaggerapi/swagger-editor
+    container_name: r2m_swagger_editor
+    restart: always
+    environment:
+      URL: 'http://api.check-act.local/v1/debug/openapi.yaml'
+    ports:
+      - "9399:8080"
+    networks:
+      backend:
+        ipv4_address: 192.168.50.6
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.50.0/24
