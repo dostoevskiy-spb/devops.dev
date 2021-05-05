@@ -39,7 +39,6 @@ services:
       - "54321:5432"
     volumes:
       - ./postgresql/maindb/data:/var/lib/postgresql/data:cached
-      - ../db.schema/maindb/initialize_users.sql:/docker-entrypoint-initdb.d/01_initialize_users.sql:cached
       - ../db.schema/maindb/initialize_database.sql:/docker-entrypoint-initdb.d/02_initialize_database.sql:cached
     restart: always
     networks:
