@@ -8,8 +8,6 @@ services:
     volumes:
       - ./nginx/:/etc/nginx/conf.d:cached
       - ./nginx/logs:/var/log/nginx:cached
-      - ../../luckynews/display.vitrina:/var/www/display.vitrina:cached
-      - ../../luckynews/backend.tds:/var/www/backend.tds:cached
     ports:
       - "${NGINX_PORT:-80}:80"
     restart: always
@@ -24,7 +22,6 @@ services:
     volumes:
       - ../backend.api:/var/www/backend.api:cached
       - ./tools:/var/www/tools:cached
-      - ./php/xhprof/output:/var/tmp/xhprof/output:cached
     working_dir: /var/www/
     restart: always
     networks:

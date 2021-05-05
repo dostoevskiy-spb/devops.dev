@@ -15,11 +15,9 @@ hosts_file := /etc/hosts
 docker_run_package :=
 .DEFAULT_GOAL := help
 
-up: docker-up
-
 init: docker-clear docker-up api-permissions #setup-composer #setup-backend-env
 
-exec-php: ## Bash to app container
+bash: ## Bash to app container
 	docker exec -it $(APP_NAME)_php bash
 
 docker-clear:
@@ -30,8 +28,11 @@ docker-restart:
 	docker-compose down
 	docker-compose up --build -d
 
-docker-up:
+up:
 	docker-compose up --build -d
+
+down:
+	docker-compose down --remove-orphans
 
 pause:
 	sleep 3
