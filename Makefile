@@ -15,7 +15,7 @@ hosts_file := /etc/hosts
 docker_run_package :=
 .DEFAULT_GOAL := help
 
-init: docker-clear up api-permissions setup-composer setup-backend-env
+init: docker-clear up api-permissions setup-composer setup-backend-env generate-keys
 
 bash: ## Bash to app container
 	docker exec -it $(APP_NAME)_php bash
@@ -48,3 +48,7 @@ setup-backend-openapi:
 
 setup-composer:
 	docker exec -w /var/www/backend.api r2m_php composer update
+	docker exec -w /var/www/backend.api r2m_php composer run-script post-create-project-cmd
+
+generate-keys:
+	docker exec -w /var/www/backend.api r2m_php composer run-script post-create-project-cmd
