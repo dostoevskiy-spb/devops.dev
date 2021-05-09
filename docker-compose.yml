@@ -22,7 +22,7 @@ services:
     volumes:
       - ../backend.api:/var/www/backend.api:cached
       - ./tools:/var/www/tools:cached
-    working_dir: /var/www/
+    working_dir: /var/www/backend.api
     restart: always
     networks:
       backend:

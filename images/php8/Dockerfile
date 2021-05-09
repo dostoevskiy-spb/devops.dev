@@ -7,7 +7,9 @@ RUN apt-get update && apt-get install -y \
     nano \
     libpq-dev \
     htop \
-    postgresql-client
+    postgresql-client \
+    libzip-dev \
+    libicu-dev
 
 # composer install
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -16,7 +18,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN docker-php-ext-install pdo_pgsql \
  && docker-php-ext-install pgsql \
  && docker-php-ext-install pcntl \
- && pecl install xdebug \
+ && docker-php-ext-install intl \
+ && docker-php-ext-install zip
+RUN pecl install xdebug \
  && docker-php-ext-enable xdebug
 
 # symlink for php73 command
@@ -27,6 +31,6 @@ RUN kill -USR2 1
 
 COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
-WORKDIR /var/www
+WORKDIR /var/www/backend.api
 
 EXPOSE 9000
