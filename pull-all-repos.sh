@@ -4,7 +4,7 @@
 # repos for deploy
 REPOS=(
     devops.dev
-    backend.api
+    laravel-ddd-skeleton
 #     frontend.panel
 )
 
