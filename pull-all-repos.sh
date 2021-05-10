@@ -1,9 +1,14 @@
 #!/bin/bash
 # must be chmod +x
 
-if [[ -d ../backend.api && -d ../backend.api/.git ]]
-then
-  git -C ../backend.api pull
-else
-  git clone git@github.com:dostoevskiy-spb/laravel-ddd-skeleton.git ../backend.api
-fi
+declare -A repos
+repos["backend.api"]="laravel-ddd-skeleton.git"
+
+# shellcheck disable=SC2034
+for repo_dir in "${!repos[@]}"; do
+  if [[ -d ../"$repo_dir" && -d ../"$repo_dir"/.git ]]; then
+    git -C ../"$repo_dir" pull
+  else
+    git clone git@github.com:dostoevskiy-spb/${repos[$repo_dir]} ../"$repo_dir"
+  fi
+done
