@@ -20,7 +20,7 @@ services:
       context: images/php8
     container_name: r2m_php
     volumes:
-      - ../backend.api:/var/www/backend.api:cached
+      - ../laravel-ddd-skeleton:/var/www/backend.api:cached
       - ./tools:/var/www/tools:cached
     working_dir: /var/www/backend.api
     restart: always
