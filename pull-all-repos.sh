@@ -1,4 +1,9 @@
 #!/bin/bash
 # must be chmod +x
 
-git -C ../backend.api pull || git clone git@github.pro:dostoevksiy-spb/laravel ddd-skeleton.git ../backend.api
+if [[ -d ../backend.api && -d ../backend.api/.git ]]
+then
+  git -C ../backend.api pull
+else
+  git clone git@github.com:dostoevskiy-spb/laravel-ddd-skeleton.git ../backend.api
+fi
