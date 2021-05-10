@@ -47,7 +47,7 @@ setup-backend-openapi:
 	docker exec -w /var/www/backend.api r2m_php php artisan openapi-build
 
 setup-composer:
-	docker exec -w /var/www/backend.api r2m_php composer update
+	docker exec -w /var/www/backend.api r2m_php composer install
 	docker exec -w /var/www/backend.api r2m_php composer run-script post-create-project-cmd
 
 generate-keys:
